@@ -1,0 +1,1 @@
+python3 audioset_main.py --frame 4 --mix 1 --train-batch 32 --workers 8 --val-batch 2 -tp 2 --epoch 60 --lr 0.001 --schedule 20 40 --resume checkpoint/AudioSet/model_avc.pth.tar

@@ -1,0 +1,1 @@
+python3 audioset_main.py -e --resume checkpoint/AudioSet/model_joint.pth.tar --frame 10 --mix 1 --val-batch 1

@@ -1,0 +1,1 @@
+python3 main.py --frame 1 --mix 2 --train-batch 16 --val-batch 1 --dataset Flickr --iter-size 1 --lr 0.001 --epoch 10
