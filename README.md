@@ -4,15 +4,22 @@ This is a PyTorch implementation that aims to perform sound localization in comp
 
 We propose a two-stage learning framework, which establishes coarse-grained audiovisual correspondence in the category level at the first stage, and achieves fine-grained sound-object alignment at the second stage.
 
+## Requirements
+
+- PyTorch 1.1.0
+- torchvision 0.3.0
+- opencv 3.4.1
+- librosa 0.7.0
+
 ## Prepare Dataset
 
 #### SoundNet-Flickr Dataset
 
-The audiovisual pairs are defined as one frame and a corresponding 5-second audio clip. We resize the image into $256\times 256$, sample the audio at $22050$ Hz, and convert it into log-mel spectrogram. We then convert the image and audio into hdf5 file format. We use the first-level labels in AudioSet for classification, and use pretrained CRNN and ResNet-18 to generate pseudo labels. The mapping from predictions to these 7 categories are stored in cluster_a.npy and cluster_v3.npy.
+The audiovisual pairs are defined as one frame and a corresponding 5-second audio clip. We resize the image into $256\times 256$, sample the audio at $22050$ Hz, and convert it into log-mel spectrogram. We then convert the image and audio into hdf5 file format. We use the first-level labels in AudioSet for classification, and use pretrained CRNN and ResNet-18 to generate pseudo labels. The mapping from predictions to these 7 categories are stored in ```utils/cluster_a.npy``` and ```utils/cluster_v3.npy```.
 
 #### AVE Dataset
 
-There are totally 4143 10-second video clips available. We extract video frames at $1$ fps, and resize the images into $256\times 256$, sample the audio at $22050Hz$, and convert it into log-mel spectrogram. We then convert the image and audio into hdf5 file format. We use the first-level labels in AudioSet for classification, and use pretrained CRNN and ResNet-18 to generate pseudo labels. The mapping from predictions to these 7 categories are stored in cluster_a.npy and cluster_v3.npy.
+There are totally 4143 10-second video clips available. We extract video frames at $1$ fps, and resize the images into $256\times 256$, sample the audio at $22050$ Hz, and convert it into log-mel spectrogram. We then convert the image and audio into hdf5 file format. We use the first-level labels in AudioSet for classification, and use pretrained CRNN and ResNet-18 to generate pseudo labels. The mapping from predictions to these 7 categories are stored in ```utils/cluster_a.npy``` and ```utils/cluster_v3.npy```.
 
 #### AudioSet Instrument Dataset
 
@@ -73,7 +80,7 @@ optional argumets:
 For AudioSet dataset, run
 
 ```
-./train_joint.sh
+./train_audioset_joint.sh
 optional argumets:
 [--train-batch] training batchsize
 [--val-batch] validation batchsize
@@ -109,10 +116,36 @@ For evaluation on AudioSet Instrument dataset, run
 ./eval_audioset.sh
 ```
 
-It outputs class-specific localization maps on each sample stored in infer.npy, then run
+It outputs class-specific localization maps on each sample stored in ```infer.npy```, then run
 
 ```
 python3 utils/evaluate.py
 ```
 
 to calculate evaluation results and visualize localization maps on different difficulty levels.
+
+## Results
+
+#### Sound Localization on SoundNet-Flickr
+
+We visualize the localization maps corresponding to different elements contained in the mixed sounds of two sources.
+
+![avatar](readme/flickr.JPG)
+
+#### Sound Localization on AudioSet instrument
+
+We visualize some examples in AudioSet with two categories of instruments making sound simultaneously. The localization maps in each subfigure are listed from left to right: AVC, Multi-task, Ours. The green boxes are detection results of Faster RCNN.
+
+![avatar](readme/audioset.JPG)
+
+#### Spatio-temporal Sound Localization in Videos
+
+We visualize the changes of localization maps in videos over time. The frames shown are extracted at 1 fps, the heatmaps show localization responses to corresponding 1-second audio clip. When only with noise, our model mainly focuses on background regions as the first two frames in Fig. (a). When there are sounds produced by specific objects, our model can accurately capture the sound makers, e.g., our model can distinguish sounds of guitar and accordion in Fig. (b), dog barking and toy-car sound in Fig. (c).
+
+![avatar](readme/ave.JPG)
+
+#### Comparison with CAM Method
+
+We show some comparison between our model and CAM method. The images in each subfigure are listed as: original image, localization result of our model, result of CAM method. It is clear that CAM method cannot distinguish the objects belonging to the same category, e.g., violin and piano in Fig. (e), but our model can precisely localize the object that makes sound in input audio.
+
+![avatar](readme/comp.JPG)
