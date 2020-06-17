@@ -144,7 +144,7 @@ We visualize the changes of localization maps in videos over time. The frames sh
 
 ![avatar](readme/ave.JPG)
 
-#### Comparison with CAM Method
+#### Comparison with CAM Baseline
 
 We show some comparison between our model and CAM method. The images in each subfigure are listed as: original image, localization result of our model, result of CAM method. It is clear that CAM method cannot distinguish the objects belonging to the same category, e.g., violin and piano in Fig. (e), but our model can precisely localize the object that makes sound in input audio.
 
