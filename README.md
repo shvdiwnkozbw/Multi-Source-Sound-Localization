@@ -33,6 +33,13 @@ For unlabeled videos in SoundNet-Flickr and AVE dataset, it is optional to intro
 
 ## Procedure of the simplified version
 
+The input data required is as follows:
+
+- image RGB frame $N\times 3\times H\times W$
+- audio spectrogram $N\times 1\times T\times F$
+- audio (pseudo) label $N\times C$
+- image (pseudo) label $N\times C$
+
 #### Training 1st stage
 
 ```
