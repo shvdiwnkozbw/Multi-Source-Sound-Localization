@@ -185,3 +185,15 @@ python3 utils/evaluate.py
 ```
 
 to calculate evaluation results and visualize localization maps on different difficulty levels.
+
+## Citation
+
+```
+@article{qian2020multiple,
+  title={Multiple Sound Sources Localization from Coarse to Fine},
+  author={Qian, Rui and Hu, Di and Dinkel, Heinrich and Wu, Mengyue and Xu, Ning and Lin, Weiyao},
+  journal={arXiv preprint arXiv:2007.06355},
+  year={2020}
+}
+```
+
