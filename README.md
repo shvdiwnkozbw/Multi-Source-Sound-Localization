@@ -17,7 +17,7 @@ We propose a two-stage learning framework, which establishes coarse-grained audi
 
 ## Prepare Dataset
 
-The detailed preprocessing code and classification pseudo label generation can be referred to ```./prepare_data``` and ```./mobile_crnn/generate_data.py```. The pseudo labels for images are similar to the audio, but replace the model with ImageNet pretrained backbones, and use ```./utils/cluster_v3.npy``` for aggregation. And it is also practical to use the same pseudo labels for both images and audios, since the ImageNet labels cannot be well aligned with 7 general categories in AudioSet, introducing extra noise. There is only slight difference in the choice of label assignment. For datasets like AudioSet, directly using videos tags as classification labels.
+The detailed preprocessing code and classification pseudo label generation can be referred to ```./prepare_data``` and ```./mobile_crnn/generate_data.py```. The pseudo labels for images are similar to the audio, but replace the model with ImageNet pretrained backbones, and use ```./utils/cluster_v3.npy``` for aggregation. And it is also practical to use the same pseudo labels for both images and audios, since the ImageNet labels cannot be well aligned with 7 general categories in AudioSet, introducing extra noise. There is only slight difference in the choice of label assignment. For datasets like AudioSet, directly use videos tags as classification labels.
 
 #### SoundNet-Flickr Dataset
 
