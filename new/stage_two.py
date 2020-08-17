@@ -33,14 +33,14 @@ class Align(nn.Module):
             nn.Linear(128, 2)
         )
         self.project_a = nn.Sequential(
-            nn.Conv1d(512, 1024, 1),
+            nn.Conv1d(512, 1024, 1, bias=False),
             nn.ReLU(True),
-            nn.Conv1d(1024, 128, 1)
+            nn.Conv1d(1024, 128, 1, bias=False)
         )
         self.project_v = nn.Sequential(
-            nn.Conv1d(512, 1024, 1),
+            nn.Conv1d(512, 1024, 1, bias=False),
             nn.ReLU(True),
-            nn.Conv1d(1024, 128, 1)
+            nn.Conv1d(1024, 128, 1, bias=False)
         )
         self.class_a = nn.Conv2d(512, 7, 1, bias=False)
         self.class_v = nn.Conv2d(512, 7, 1, bias=False)
@@ -90,14 +90,14 @@ class Location(nn.Module):
             nn.Linear(128, 2)
         )
         self.project_a = nn.Sequential(
-            nn.Conv1d(512, 1024, 1),
+            nn.Conv1d(512, 1024, 1, bias=False),
             nn.ReLU(True),
-            nn.Conv1d(1024, 128, 1)
+            nn.Conv1d(1024, 128, 1, bias=False)
         )
         self.project_v = nn.Sequential(
-            nn.Conv1d(512, 1024, 1),
+            nn.Conv1d(512, 1024, 1, bias=False),
             nn.ReLU(True),
-            nn.Conv1d(1024, 128, 1)
+            nn.Conv1d(1024, 128, 1, bias=False)
         )
         self.class_a = nn.Conv2d(512, 7, 1, bias=False)
         self.class_v = nn.Conv2d(512, 7, 1, bias=False)

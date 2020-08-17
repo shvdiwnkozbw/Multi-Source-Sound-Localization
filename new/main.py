@@ -66,8 +66,9 @@ def train_stage_two(model, trainloader, optimizer):
         pos = torch.eye(distance.shape[0]).to(fine_a.device)
         neg = 1 - pos
         pos_dis = torch.sum(distance*eff*pos) / torch.sum(pos*eff+1e-10)
-        neg_dis = torch.sum(distance*eff*neg) / torch.sum(neg*eff+1e-10)
-        dloss = pos_dis + torch.nn.functional.relu(1.4-neg_dis.sqrt()).pow(2)
+        neg_dis = torch.sum(torch.nn.functional.relu(1.4-distance.sqrt()).pow(2)
+                            *eff*neg) / torch.sum(neg*eff+1e-10)
+        dloss = pos_dis + neg_dis
         
         loss = aloss + vloss + avcloss + dloss
         losses.append(loss.item())
@@ -100,7 +101,7 @@ def test(model, testloader):
         avc, cls_a, cls_v, fine_a, fine_v, cam_a, cam_v, aln_a, aln_v = model(spec, img)
         cls_a = torch.nn.functional.sigmoid(cls_a)
         similarity = torch.einsum('bij,bik->bjk', fine_a, fine_v)
-        similarity = torch.nn.functional.softmax(similarity/0.1, -1)
+        similarity = torch.nn.functional.relu(similarity)
         similarity = similarity.view(*similarity.shape[:2], 16, 16)
         similarity = torch.nn.functional.interpolate(similarity, (256, 256), 
                                                      mode='bilinear')
@@ -111,7 +112,7 @@ def test(model, testloader):
         location = visualize(img, similarity, torch.sigmoid(cls_a)[0], batch_idx)
         locations.append(location)
         gtmaps.append(label[0].numpy())
-        ciou = cal_ciou(location, label, 0.01)
+        ciou = cal_ciou(location, label, 0.5)
         cious.append(ciou)
         aln_as.append(aln_a.cpu().detach().numpy())
         aln_vs.append(aln_v.cpu().detach().numpy())
@@ -136,14 +137,14 @@ def cal_ciou(location, gtmap, thres):
 
 def visualize(img, location, prob, idx):
     prob = prob.cpu().detach().numpy()
+    eff = (prob>0.3)
+    eff[np.argmax(prob)] = 1
     img = img.permute(0, 2, 3, 1)
     img = img.cpu().numpy()[0]
     location = torch.nn.functional.relu(location).cpu().detach().numpy()[0]
     img = img * np.array([0.229, 0.224, 0.225]) + np.array([0.485, 0.456, 0.406])
-    location = np.sum(location*prob.reshape(7, 1, 1), 0) / np.sum(prob)
+    location = np.sum(location[eff]*prob.reshape(7, 1, 1)[eff], 0) / np.sum(prob[eff])
     location = location / np.max(location)
-    # plt.imsave('vis/%d.jpg'%idx, 0.5*img+0.5*np.expand_dims(location, -1))
-    # plt.imsave('vis/%d.jpg'%idx, img)
     return location
 
 if __name__ == '__main__':
