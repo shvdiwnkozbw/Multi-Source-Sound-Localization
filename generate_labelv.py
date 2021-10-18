@@ -13,7 +13,7 @@ if __name__ == "__main__":
             im = torch.FloatTensor(im).unsqueeze(0)
             im = im.permute(0, 3, 1, 2)
             prob = model(im).detach()
-            prob[torch.topk(prob, dim=1, k=990)] = 0
+            prob[torch.topk(prob, dim=1, k=990, largest=False)] = 0
             prediction = prob.numpy() * aggre
             prediction = np.sum(prediction, 1)
             prediction = prediction / np.max(prediction)
